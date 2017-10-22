@@ -30,6 +30,39 @@ public:
 
     // Copy a matrix
     Matrix(Matrix const& copy);
+
+    // set matrix values
+    void setValues(std::vector<std::vector<int>> values){
+        this->values = values;
+    }
+
+    // get matrix
+    std::vector getValues() const {
+
+        return values;
+    };
+
+    // get value at specific index
+    int getValue(int row, int col)const {
+        return values[row][col];
+    };
+
+    // get rows count
+    int getRows()const {
+        return (values.size());
+    };
+
+    // get columns count
+    int getCols()const {
+        return (values[0].size());
+    };
+
+    // Matrix Operations
+    Matrix addition(const Matrix&);
+    Matrix subtraction(const Matrix&);
+    Matrix multiplication(const Matrix&);
+    Matrix transpose();
+    Matrix division(const Matrix&);
 };
 
 #endif //MATH_LIBRARY_MATRIX_H
