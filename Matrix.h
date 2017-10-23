@@ -5,64 +5,132 @@
 #ifndef MATH_LIBRARY_MATRIX_H
 #define MATH_LIBRARY_MATRIX_H
 
+#include <vector>
+
+
 class Matrix {
 private:
     // matrix with rows and columns
     int rows, cols;
     // values, organized as an outer vector of rows
     // and an inner vector of columns
-    std::vector<std::vector<int>> values;
+    std::vector<std::vector<float> > values;
 
 public:
+    // Empty Constructor
+    Matrix()
+    {
+        rows = 0;
+        cols = 0;
+        this->values.resize(0);
+        this->values[0].resize(0);
+    }
+
     // initialize matrix by its size
-    matrix(int rows, int cols) : rows(rows), cols(cols) {
+    Matrix(const unsigned int rows, const unsigned int cols) {
 
         // initialize the matrix size
-        values.resize(rows);
-        for (int i = 0; i < rows; ++i)
+        this->values.resize(rows);
+        for (int i = 0; i < rows; ++i) {
+            this->values[i].resize(cols);
+        }
+
+        this->rows = rows;
+        this->cols = cols;
+    }
+
+    // initialize matrix by vector
+    Matrix(const std::vector<std::vector<float> > values) {
+
+        this->rows = int(values.size());
+        this->cols = int(values[0].size());
+        this->values.resize(values.size());
+        for (int i = 0; i < values.size(); ++i)
         {
-            values[i].resize(cols);
+            this->values[i].resize(values[i].size());
+        }
+        for (int i = 0; i < values.size(); ++i)
+        {
+            for (int j = 0; j < values[i].size(); ++j)
+            {
+                this->values[i][j] = values[i][j];
+            }
         }
     }
 
-    // Empty Constructor
-    Matrix();
 
     // Copy a matrix
-    Matrix(Matrix const& copy);
-
-    // set matrix values
-    void setValues(std::vector<std::vector<int>> values){
-        this->values = values;
+    Matrix(const Matrix& matrix) {
+        rows = matrix.rows;
+        cols = matrix.cols;
+        values.resize(matrix.values.size());
+        for (int i = 0; i < values.size(); ++i)
+        {
+            values[i].resize(matrix.values[i].size());
+        }
+        for (int i = 0; i < values.size(); ++i)
+        {
+            for (int j = 0; j < values[i].size(); ++j)
+            {
+                values[i][j] = matrix.values[i][j];
+            }
+        }
     }
 
-    // get matrix
-    std::vector getValues() const {
+    // Matrix Destructor
+    ~Matrix() {
+        //vector<vector<float> >().swap(values);
+        values.shrink_to_fit();
+    }
+
+    // get matrix values
+    std::vector<std::vector<float> > getValues() {
 
         return values;
-    };
+    }
 
     // get value at specific index
-    int getValue(int row, int col)const {
+    float getValue(int row, int col) {
         return values[row][col];
-    };
+    }
+
+    // set matrix values
+    void setValues(std::vector<std::vector<float> > values){
+        this->values = values;
+        this->rows = int(values.size());
+        this->cols = int(values[0].size());
+    }
 
     // get rows count
-    int getRows()const {
-        return (values.size());
-    };
+    int getRows(){
+        return int(values.size());
+    }
 
     // get columns count
-    int getCols()const {
-        return (values[0].size());
-    };
+    int getCols(){
+        return int(values[0].size());
+    }
 
     // Matrix Operations
-    Matrix addition(const Matrix&);
-    Matrix subtraction(const Matrix&);
-    Matrix multiplication(const Matrix&);
-    Matrix transpose();
-    Matrix division(const Matrix&);
+    Matrix operator+(Matrix& matrix){
+
+    }
+
+    Matrix operator-(Matrix& matrix){
+
+    }
+
+    Matrix operator*(Matrix& matrix){
+
+    }
+
+    Matrix operator~(){
+
+    }
+
+    Matrix operator/(Matrix& matrix){
+
+    }
 };
 
 #endif //MATH_LIBRARY_MATRIX_H
