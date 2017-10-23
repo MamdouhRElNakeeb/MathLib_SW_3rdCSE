@@ -34,8 +34,8 @@
 ## Collaborators
 - [Mamdouh El Nakeeb](https://github.com/MamdouhRElNakeeb)
 - [Abdelrahman Magdy](https://github.com/)
-- [Manar Abdelrahman](https://github.com/)
-- [Menna Ehab](https://github.com/)
+- [Manar Abdelrahman](https://github.com/ManarABDELRAHMAN)
+- [Menna Ehab](https://github.com/MennaEhab)
 - [Hadi Hebat](https://github.com/)
 - [Nabil Negm](https://github.com/)
-- [Ahmed Gamal](https://github.com/)
+- [Ahmed Khaled](https://github.com/AhmedGamil)
