@@ -4,133 +4,189 @@
 
 #ifndef MATH_LIBRARY_MATRIX_H
 #define MATH_LIBRARY_MATRIX_H
-
+#include <iostream>
 #include <vector>
 
 
 class Matrix {
 private:
-    // matrix with rows and columns
-    int rows, cols;
-    // values, organized as an outer vector of rows
-    // and an inner vector of columns
-    std::vector<std::vector<float> > values;
+	// matrix with rows and columns
+	int rows, cols;
+	// values, organized as an outer vector of rows
+	// and an inner vector of columns
+	std::vector<std::vector<float> > values;
 
 public:
-    // Empty Constructor
-    Matrix()
-    {
-        rows = 0;
-        cols = 0;
-        this->values.resize(0);
-        this->values[0].resize(0);
-    }
+	// Empty Constructor
+	Matrix()
+	{
+		rows = 0;
+		cols = 0;
+		this->values.resize(0);
+		this->values[0].resize(0);
+	}
 
-    // initialize matrix by its size
-    Matrix(const unsigned int rows, const unsigned int cols) {
+	// initialize matrix by its size
+	Matrix(const unsigned int rows, const unsigned int cols) {
 
-        // initialize the matrix size
-        this->values.resize(rows);
-        for (int i = 0; i < rows; ++i) {
-            this->values[i].resize(cols);
-        }
+		// initialize the matrix size
+		this->values.resize(rows);
+		for (int i = 0; i < rows; ++i) {
+			this->values[i].resize(cols);
+		}
 
-        this->rows = rows;
-        this->cols = cols;
-    }
+		this->rows = rows;
+		this->cols = cols;
+	}
 
-    // initialize matrix by vector
-    Matrix(const std::vector<std::vector<float> > values) {
+	// initialize matrix by vector
+	Matrix(const std::vector<std::vector<float> > values) {
 
-        this->rows = int(values.size());
-        this->cols = int(values[0].size());
-        this->values.resize(values.size());
-        for (int i = 0; i < values.size(); ++i)
-        {
-            this->values[i].resize(values[i].size());
-        }
-        for (int i = 0; i < values.size(); ++i)
-        {
-            for (int j = 0; j < values[i].size(); ++j)
-            {
-                this->values[i][j] = values[i][j];
-            }
-        }
-    }
+		this->rows = int(values.size());
+		this->cols = int(values[0].size());
+		this->values.resize(values.size());
+		for (int i = 0; i < values.size(); ++i)
+		{
+			this->values[i].resize(values[i].size());
+		}
+		for (int i = 0; i < values.size(); ++i)
+		{
+			for (int j = 0; j < values[i].size(); ++j)
+			{
+				this->values[i][j] = values[i][j];
+			}
+		}
+	}
 
 
-    // Copy a matrix
-    Matrix(const Matrix& matrix) {
-        rows = matrix.rows;
-        cols = matrix.cols;
-        values.resize(matrix.values.size());
-        for (int i = 0; i < values.size(); ++i)
-        {
-            values[i].resize(matrix.values[i].size());
-        }
-        for (int i = 0; i < values.size(); ++i)
-        {
-            for (int j = 0; j < values[i].size(); ++j)
-            {
-                values[i][j] = matrix.values[i][j];
-            }
-        }
-    }
+	// Copy a matrix
+	Matrix(const Matrix& matrix) {
+		rows = matrix.rows;
+		cols = matrix.cols;
+		values.resize(matrix.values.size());
+		for (int i = 0; i < values.size(); ++i)
+		{
+			values[i].resize(matrix.values[i].size());
+		}
+		for (int i = 0; i < values.size(); ++i)
+		{
+			for (int j = 0; j < values[i].size(); ++j)
+			{
+				values[i][j] = matrix.values[i][j];
+			}
+		}
+	}
 
-    // Matrix Destructor
-    ~Matrix() {
-        //vector<vector<float> >().swap(values);
-        values.shrink_to_fit();
-    }
+	// Matrix Destructor
+	~Matrix() {
+		//vector<vector<float> >().swap(values);
+		values.shrink_to_fit();
+	}
 
-    // get matrix values
-    std::vector<std::vector<float> > getValues() {
+	// get matrix values
+	std::vector<std::vector<float> > getValues() {
 
-        return values;
-    }
+		return values;
+	}
 
-    // get value at specific index
-    float getValue(int row, int col) {
-        return values[row][col];
-    }
+	// get value at specific index
+	float getValue(int row, int col) {
+		return values[row][col];
+	}
 
-    // set matrix values
-    void setValues(std::vector<std::vector<float> > values){
-        this->values = values;
-        this->rows = int(values.size());
-        this->cols = int(values[0].size());
-    }
+	// set matrix values
+	void setValues(std::vector<std::vector<float> > values) {
+		this->values = values;
+		this->rows = int(values.size());
+		this->cols = int(values[0].size());
+	}
 
-    // get rows count
-    int getRows(){
-        return int(values.size());
-    }
+	// get rows count
+	int getRows() {
+		return int(values.size());
+	}
 
-    // get columns count
-    int getCols(){
-        return int(values[0].size());
-    }
+	// get columns count
+	int getCols() {
+		return int(values[0].size());
+	}
 
-    // Matrix Operations
-    Matrix operator+(Matrix& matrix){
+	// Matrix Operations
+	Matrix operator+(Matrix& matrix) {
 
-    }
+	}
 
-    Matrix operator-(Matrix& matrix){
+	Matrix operator-(Matrix& matrix) {
 
-    }
+	}
 
-    Matrix operator*(Matrix& matrix){
+	Matrix Multiplication(Matrix& MatrixA, Matrix& MatrixB) 
+	{
+		Matrix MatrixResult = Matrix(MatrixA.rows, MatrixB.cols);
 
-    }
+		if (MatrixA.cols != MatrixB.rows)
+		{
+			std::cout << "These two matrices can not be multiplied\n";
+			return;
+		}
+		else
+		{
+			for (int i = 0; i < MatrixA.rows; i++)
+			{
+				for (int j = 0; j < MatrixB.cols; j++)
+				{
+					MatrixResult.values[i][j] = MatrixA.values[i][j] * MatrixB.values[j][i];
+				}
+			}
+		}
+		return MatrixResult;
+	}
 
-    Matrix operator~(){
+	Matrix operator~() {
 
-    }
+	}
 
-    Matrix operator/(Matrix& matrix){
+	Matrix Division(Matrix& MatrixA, Matrix& MatrixB)
+	{
+		// If the matrix is not a square (rows = columns) , you can't get a inverse, so you can't divide.
+		if (MatrixB.rows != MatrixB.cols)
+		{
+			std::cout << "There is no unique solution\n";
+			return;
+		}
+		Matrix MatrixBInverse = Matrix(MatrixB.rows, MatrixB.cols);
 
-    }
+		if (MatrixB.rows == 2)
+		{
+			int Determinant = ((MatrixB.values[0][0] * MatrixB.values[1][1]) - (MatrixB.values[1][0] * MatrixB.values[0][1]));
+			int Reciprocal = 1 / Determinant;
+
+			int temp = MatrixB.values[0][0];
+			MatrixB.values[0][0] = MatrixB.values[1][1];
+			MatrixB.values[1][1] = temp;
+
+			MatrixB.values[1][0] = -MatrixB.values[1][0];
+			MatrixB.values[0][1] = -MatrixB.values[0][1];
+
+			for (int i = 0; i < MatrixA.rows; i++)
+			{
+				for (int j = 0; j < MatrixB.cols; j++)
+				{
+					MatrixBInverse.values[i][j] = Reciprocal * MatrixBInverse.values[i][j];
+				}
+			}
+
+		}
+		else
+		{
+
+		}
+
+		Matrix Result = Multiplication(MatrixA, MatrixBInverse);
+		return Result;
+		
+	}
 };
 
 #endif //MATH_LIBRARY_MATRIX_H
+
