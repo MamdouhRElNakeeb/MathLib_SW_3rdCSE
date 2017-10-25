@@ -16,7 +16,7 @@ private:
 	// values, organized as an outer vector of rows
 	// and an inner vector of columns
 	std::vector<std::vector<float> > values;
-
+	
 public:
 	// Empty Constructor
 	Matrix()
@@ -112,6 +112,52 @@ public:
 		return int(values[0].size());
 	}
 
+	// Used to get determinant
+
+	int getDeterminant(Matrix& matrix, int n) 
+	{
+		int Determinant = 0, indexcols, minorrows, minorcols, i, j;
+		Matrix minorMatrix(n - 1,n - 1);
+
+		if (n == 2)
+		{
+			Determinant = ((matrix.values[0][0] * matrix.values[1][1]) - (matrix.values[1][0] * matrix.values[0][1]));
+			return Determinant;
+		}
+
+		else 
+		{
+			for (indexcols = 0; indexcols<n; indexcols++)
+			{
+				minorrows = 0;
+				minorcols = 0;
+				for (i = 1; i < n; i++)
+				{
+					for (j = 0; j < n; j++)
+					{
+						if (j == indexcols) 
+						{
+							continue;
+						}
+						minorMatrix.values[minorrows][minorcols] = matrix.values[i][j];
+						minorcols++;
+						if (minorcols == n - 1)
+						{
+							minorrows++;
+							minorcols = 0;
+						}
+					}
+				}
+				Determinant += matrix.values[0][indexcols] * pow(-1, indexcols)*getDeterminant(minorMatrix, n - 1);
+			}
+			return Determinant;
+		}
+	}
+
+
+
+
+
 	// Matrix Operations
 	Matrix operator+(Matrix& matrix) {
 
@@ -125,7 +171,7 @@ public:
 	{
 		//Used for Testing
 		/* 
-		int x = 0;
+		float x = 0;
 		std::cout << "Please Enter the Matrix A Values row by row\n";
 		for (int i = 0; i < MatrixA.rows; i++)
 		{
@@ -185,7 +231,7 @@ public:
 
 		//Used for Testing
 		/*
-		int x = 0;
+		float x = 0;
 		std::cout << "Please Enter the Matrix A Values row by row\n";
 		for (int i = 0; i < MatrixA.rows; i++)
 		{
@@ -217,10 +263,10 @@ public:
 
 		if (MatrixB.rows == 2)
 		{
-			int Determinant = ((MatrixB.values[0][0] * MatrixB.values[1][1]) - (MatrixB.values[1][0] * MatrixB.values[0][1]));
+			float Determinant = getDeterminant(MatrixB, MatrixB.rows);
 			float Reciprocal = 1.0 / Determinant;
 
-			int temp = MatrixB.values[0][0];
+			float temp = MatrixB.values[0][0];
 			MatrixBInverse.values[0][0] = MatrixBInverse.values[1][1];
 			MatrixBInverse.values[1][1] = temp;
 
@@ -237,8 +283,9 @@ public:
 
 		}
 		else
-		{
-
+		{ 
+			float Determinant = getDeterminant(MatrixB, MatrixB.rows);
+			float Reciprocal = 1.0 / Determinant;
 		}
 
 		Matrix Result = Multiplication(MatrixA, MatrixBInverse);
