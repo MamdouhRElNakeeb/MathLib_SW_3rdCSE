@@ -7,7 +7,6 @@
 
 #include <vector>
 
-
 class Matrix {
 private:
     // matrix with rows and columns
@@ -140,10 +139,54 @@ public:
 
     Matrix operator*(Matrix& matrix){
 
+
+		/*if (values[0].size() != matrix.values.size() )
+		{
+			
+		cout<<"error";
+		
+		}
+
+		else */
+
+		int sum =0  ;
+		Matrix temp( rows ,matrix.cols);
+		for(int i=0 ; i<values.size() ; i++)
+		{
+			for (int j=0 ; j <matrix.values[0].size() ; j++)
+			{
+
+			for (int m=0 ; m<values[0].size() ; m++)
+			{
+				int  z;
+				z= values[i][m]*matrix.values[m][j ];
+				sum= sum + z;
+				
+			}
+
+			temp.values[i][j]=sum;
+			sum=0;
+			}
+
+		}
+		return temp;
+		
+	
+	
     }
 
     Matrix operator~(){
-
+	
+			Matrix temp(cols,rows);
+		for(int i=0 ; i<values.size() ; i++)
+		{
+			for (int j=0 ; j<values[0].size() ; j++)
+			{
+				temp.values[j][i]=values[i][j];
+			}
+		}
+		return temp;
+    
     }
 
     Matrix operator/(Matrix& matrix){
@@ -151,4 +194,5 @@ public:
     }
 };
 
-#endif //MATH_LIBRARY_MATRIX_H 
+
+#endif //MATH_LIBRARY_MATRIX_H
