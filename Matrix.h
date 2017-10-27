@@ -1,5 +1,5 @@
-//
-// Created by Mamdouh El Nakeeb on 10/20/17.
+
+// addition and subtraction added by manar abdelrahman
 //
 
 #ifndef MATH_LIBRARY_MATRIX_H
@@ -113,10 +113,28 @@ public:
 
     // Matrix Operations
     Matrix operator+(Matrix& matrix){
+		Matrix temp(matrix.rows,matrix.cols);
+		for(int i=0 ; i<matrix.values.size() ; i++)
+		{
+			for (int t=0 ; t<matrix.values[0].size() ; t++)
+			{
+				temp.values[i][t]=values[i][t]+matrix.values[i][t];
+			}
+		}
+		return temp;
 
     }
 
     Matrix operator-(Matrix& matrix){
+		Matrix temp(matrix.rows,matrix.cols);
+		for(int i=0 ; i<matrix.values.size() ; i++)
+		{
+			for (int t=0 ; t<matrix.values[0].size() ; t++)
+			{
+				temp.values[i][t]=values[i][t]-matrix.values[i][t];
+			}
+		}
+		return temp;
 
     }
 
@@ -133,4 +151,4 @@ public:
     }
 };
 
-#endif //MATH_LIBRARY_MATRIX_H
+#endif //MATH_LIBRARY_MATRIX_H 
