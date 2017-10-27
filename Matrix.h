@@ -5,9 +5,9 @@
 #ifndef MATH_LIBRARY_MATRIX_H
 #define MATH_LIBRARY_MATRIX_H
 
-#include <iostream>
+
 #include <vector>
-#include "Matrix.h"
+
 
 #include <vector>
 
