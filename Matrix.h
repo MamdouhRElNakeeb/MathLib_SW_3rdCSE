@@ -9,14 +9,15 @@
 #include <math.h>
 
 
-class Matrix {
+class Matrix
+{
 private:
 	// matrix with rows and columns
 	int rows, cols;
 	// values, organized as an outer vector of rows
 	// and an inner vector of columns
 	std::vector<std::vector<float> > values;
-	
+
 public:
 	// Empty Constructor
 	Matrix()
@@ -114,10 +115,10 @@ public:
 
 	// Used to get determinant
 
-	int getDeterminant(Matrix& matrix, int n) 
+	int getDeterminant(Matrix& matrix, int n)
 	{
 		int Determinant = 0, indexcols, minorrows, minorcols, i, j;
-		Matrix minorMatrix(n - 1,n - 1);
+		Matrix minorMatrix(n - 1, n - 1);
 
 		if (n == 2)
 		{
@@ -125,17 +126,20 @@ public:
 			return Determinant;
 		}
 
-		else 
+		else
 		{
-			for (indexcols = 0; indexcols<n; indexcols++)
+			// index for the larger matrix
+			for (indexcols = 0; indexcols < n; indexcols++)
 			{
+				// indexs for the minor matrix
 				minorrows = 0;
 				minorcols = 0;
+
 				for (i = 1; i < n; i++)
 				{
 					for (j = 0; j < n; j++)
 					{
-						if (j == indexcols) 
+						if (j == indexcols)
 						{
 							continue;
 						}
@@ -167,66 +171,73 @@ public:
 
 	}
 
-	Matrix Multiplication(Matrix& MatrixA, Matrix& MatrixB)
+	Matrix operator*(Matrix& matrix) {
+		
+	}
+
+	//Used for testing
+	/*Matrix Multiplication(Matrix& MatrixA, Matrix& MatrixB)
 	{
-		//Used for Testing
-		/* 
-		float x = 0;
-		std::cout << "Please Enter the Matrix A Values row by row\n";
-		for (int i = 0; i < MatrixA.rows; i++)
-		{
-			for (int j = 0; j < MatrixA.cols; j++)
-			{
-				std::cin >> x;
-				MatrixA.values[i][j] = x;
+	//Used for Testing
 
-			}
-		}
-		std::cout << "Please Enter the Matrix B Values row by row\n";
-		for (int i = 0; i < MatrixB.rows; i++)
-		{
-			for (int j = 0; j < MatrixB.cols; j++)
-			{
-				std::cin >> x;
-				MatrixB.values[i][j] = x;
-			}
-		}
-		*/
-		Matrix MatrixResult = Matrix(MatrixA.rows, MatrixB.cols);
-
-		if (MatrixA.cols != MatrixB.rows)
-		{
-			std::cout << "These two matrices can not be multiplied\n";
-			return Matrix();
-		}
-		else
-		{
-			float sum = 0;
-			int indexrows = 0, indexcols = 0;
-			for (int i = 0; i < MatrixResult.rows * MatrixResult.cols; i++)
-			{
-				for (int j = 0; j < MatrixB.rows; j++)
-				{
-					 sum += MatrixA.values[indexrows][j] * MatrixB.values[j][indexcols];
-				}
-				MatrixResult.values[indexrows][indexcols] = floor(sum);
-				sum = 0;
-				indexcols++;
-				if (i > 0 && MatrixB.cols % i == 0 && indexrows < MatrixA.rows - 1)
-				{
-					indexcols = 0;
-					indexrows++;
-				}
-			}
-		}
-		return MatrixResult;
-	}
-
-	Matrix operator~() {
+	float x = 0;
+	std::cout << "Please Enter the Matrix A Values row by row\n";
+	for (int i = 0; i < MatrixA.rows; i++)
+	{
+	for (int j = 0; j < MatrixA.cols; j++)
+	{
+	std::cin >> x;
+	MatrixA.values[i][j] = x;
 
 	}
+	}
+	std::cout << "Please Enter the Matrix B Values row by row\n";
+	for (int i = 0; i < MatrixB.rows; i++)
+	{
+	for (int j = 0; j < MatrixB.cols; j++)
+	{
+	std::cin >> x;
+	MatrixB.values[i][j] = x;
+	}
+	}
 
-	Matrix Division(Matrix& MatrixA, Matrix& MatrixB)
+	Matrix MatrixResult = Matrix(MatrixA.rows, MatrixB.cols);
+
+	if (MatrixA.cols != MatrixB.rows)
+	{
+	std::cout << "These two matrices can not be multiplied\n";
+	return Matrix();
+	}
+	else
+	{
+	float sum = 0;
+	int indexrows = 0, indexcols = 0;
+	for (int i = 0; i < MatrixResult.rows * MatrixResult.cols; i++)
+	{
+	for (int j = 0; j < MatrixB.rows; j++)
+	{
+	sum += MatrixA.values[indexrows][j] * MatrixB.values[j][indexcols];
+	}
+	MatrixResult.values[indexrows][indexcols] = floor(sum);
+	sum = 0;
+	indexcols++;
+	if (i > 0 && MatrixB.cols % i == 0 && indexrows < MatrixA.rows - 1)
+	{
+	indexcols = 0;
+	indexrows++;
+	}
+	}
+	}
+	return MatrixResult;
+	}
+	*/
+
+	Matrix operator~()
+	{
+
+	}
+
+	Matrix operator/(Matrix& matrix)
 	{
 
 		//Used for Testing
@@ -254,28 +265,38 @@ public:
 		*/
 
 		// If the matrix is not a square (rows = columns) , you can't get a inverse, so you can't divide.
-		if (MatrixB.rows != MatrixB.cols)
+		if (rows != matrix.cols)
 		{
 			std::cout << "There is no unique solution\n";
 			return Matrix();
 		}
-		Matrix MatrixBInverse = Matrix(MatrixB);
 
-		if (MatrixB.rows == 2)
+		float Determinant = getDeterminant(matrix, matrix.rows);
+		float Reciprocal = 1.0 / Determinant;
+		// Used to get the n - 1 x n -1 matrices for to get inverse
+		Matrix Cofactors(matrix.rows - 1, matrix.cols - 1);
+
+		Matrix MatrixBInverse(matrix.rows, matrix.cols);
+
+		int indexcols, indexrows, minorrows, minorcols, i, j, n = matrix.cols;
+		// z is indexrows for inverse matrix , y for indexcols for inverse matrix , powerindexes to adjust signs
+		int z = 0, y = 0, powerindex1 = 0, powerindex2 = 0;
+
+		if (matrix.rows == 2)
 		{
-			float Determinant = getDeterminant(MatrixB, MatrixB.rows);
-			float Reciprocal = 1.0 / Determinant;
 
-			float temp = MatrixB.values[0][0];
+			MatrixBInverse = Matrix(matrix);
+
+			float temp = matrix.values[0][0];
 			MatrixBInverse.values[0][0] = MatrixBInverse.values[1][1];
 			MatrixBInverse.values[1][1] = temp;
 
 			MatrixBInverse.values[1][0] = -MatrixBInverse.values[1][0];
 			MatrixBInverse.values[0][1] = -MatrixBInverse.values[0][1];
 
-			for (int i = 0; i < MatrixB.rows; i++)
+			for (i = 0; i < matrix.rows; i++)
 			{
-				for (int j = 0; j < MatrixB.cols; j++)
+				for (j = 0; j < matrix.cols; j++)
 				{
 					MatrixBInverse.values[i][j] = Reciprocal * MatrixBInverse.values[i][j];
 				}
@@ -283,17 +304,80 @@ public:
 
 		}
 		else
-		{ 
-			float Determinant = getDeterminant(MatrixB, MatrixB.rows);
-			float Reciprocal = 1.0 / Determinant;
-		}
+		{
+			for (indexcols = 0, indexrows = 0; indexrows < n; indexcols++)
+			{
+				minorrows = 0;
+				minorcols = 0;
+				if (indexrows == 0)
+				{
+					i = 1;
+				}
+				else
+				{
+					i = 0;
+				}
+				for (i; i < n; i++)
+				{
+					if (i == indexrows)
+					{
+						continue;
+					}
+					for (j = 0; j < n; j++)
+					{
+						if (j == indexcols)
+						{
+							continue;
+						}
+						Cofactors.values[minorrows][minorcols] = matrix.values[i][j];
+						minorcols++;
+						if (minorcols == n - 1)
+						{
+							minorrows++;
+							minorcols = 0;
+						}
+					}
+				}
+				MatrixBInverse.values[z][y] = getDeterminant(Cofactors, n - 1) * pow(-1, powerindex1);
+				powerindex2++;
+				if (powerindex2 == n)
+				{
+					powerindex2 = 0;
+					powerindex1++;
+				}
+				powerindex1++;
+				y++;
+				if (y == n)
+				{
+					z++;
+					if (z == n)
+					{
+						z = n - 1;
+					}
+					y = 0;
+				}
 
-		Matrix Result = Multiplication(MatrixA, MatrixBInverse);
+				if (indexcols == n - 1)
+				{
+					indexcols = -1;
+					indexrows++;
+				}
+			}
+
+		}
+		// 
+		MatrixBInverse = MatrixBInverse.operator~();
+		for (int x = 0; x < MatrixBInverse.rows; x++)
+		{
+			for (int y = 0; y < MatrixBInverse.cols; y++)
+			{
+				MatrixBInverse.values[x][y] = Reciprocal * MatrixBInverse.values[x][y];
+			}
+		}
+		Matrix Result = *this * MatrixBInverse;
 		return Result;
 
 	}
+
 };
-
 #endif //MATH_LIBRARY_MATRIX_H
-
-
