@@ -168,14 +168,11 @@ public:
 
 		}
 		return temp;
-		
-	
-	
     }
 
     Matrix operator~(){
 	
-			Matrix temp(cols,rows);
+		Matrix temp(cols,rows);
 		for(int i=0 ; i<values.size() ; i++)
 		{
 			for (int j=0 ; j<values[0].size() ; j++)
@@ -184,7 +181,6 @@ public:
 			}
 		}
 		return temp;
-    
     }
 
 	// Used to get determinant
@@ -233,8 +229,11 @@ public:
   
   Matrix inverse() {
     
+    float Determinant = getDeterminant(matrix, matrix.rows);
+    float Reciprocal = 1.0 / Determinant;
+
     // Used to get the n - 1 x n -1 matrices for to get inverse
-		Matrix Cofactors(rows - 1, cols - 1);
+	Matrix Cofactors(rows - 1, cols - 1);
     
     Matrix MatrixBInverse(rows, cols);
 
@@ -420,10 +419,7 @@ public:
 			return Matrix();
 		}
 
-		float Determinant = getDeterminant(matrix, matrix.rows);
-		float Reciprocal = 1.0 / Determinant;
-		
-    Matrix MatrixBInverse = matrix.inverse();
+        Matrix MatrixBInverse = matrix.inverse();
     
 		for (int x = 0; x < MatrixBInverse.rows; x++)
 		{
@@ -435,7 +431,19 @@ public:
 		Matrix Result = this * MatrixBInverse;
 		return Result;
 
-	}
+    }
+    
+    void display() {
+
+        for (int i = 0; i < rows; i++){
+            for (int j = 0; j < cols; j++) {
+                std::cout << values[i][j] << "  ";
+            }
+            
+            std::cout << std::endl;
+        }
+    }
 
 };
-#endif //MATH_LIBRARY_MATRIX_H
+
+#endif MATH_LIBRARY_MATRIX_H
