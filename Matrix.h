@@ -227,106 +227,115 @@ public:
 		}
 	}
   
-  Matrix inverse() {
+    Matrix inverse() {
     
-    float Determinant = getDeterminant(matrix, matrix.rows);
-    float Reciprocal = 1.0 / Determinant;
-
-    // Used to get the n - 1 x n -1 matrices for to get inverse
-	Matrix Cofactors(rows - 1, cols - 1);
+        float Determinant = getDeterminant(this, rows);
+        float Reciprocal = 1.0 / Determinant;
     
-    Matrix MatrixBInverse(rows, cols);
-
-		int indexcols, indexrows, minorrows, minorcols, i, j, n = cols;
-		// z is indexrows for inverse matrix , y for indexcols for inverse matrix , powerindexes to adjust signs
-		int z = 0, y = 0, powerindex1 = 0, powerindex2 = 0;
-
-		if (rows == 2)
+        // Used to get the n - 1 x n -1 matrices for to get inverse
+        Matrix Cofactors(rows - 1, cols - 1);
+        
+        Matrix MatrixBInverse(rows, cols);
+    
+        int indexcols, indexrows, minorrows, minorcols, i, j, n = cols;
+        // z is indexrows for inverse matrix , y for indexcols for inverse matrix , powerindexes to adjust signs
+        int z = 0, y = 0, powerindex1 = 0, powerindex2 = 0;
+    
+        if (rows == 2)
+        {
+    
+            MatrixBInverse = Matrix(this);
+    
+            float temp = this->values[0][0];
+            MatrixBInverse.values[0][0] = MatrixBInverse.values[1][1];
+            MatrixBInverse.values[1][1] = temp;
+    
+            MatrixBInverse.values[1][0] = -MatrixBInverse.values[1][0];
+            MatrixBInverse.values[0][1] = -MatrixBInverse.values[0][1];
+    
+            for (i = 0; i < rows; i++)
+            {
+                for (j = 0; j < cols; j++)
+                {
+                    MatrixBInverse.values[i][j] = Reciprocal * MatrixBInverse.values[i][j];
+                }
+            }
+    
+        }
+        else
+        {
+            for (indexcols = 0, indexrows = 0; indexrows < n; indexcols++)
+            {
+                minorrows = 0;
+                minorcols = 0;
+                if (indexrows == 0)
+                {
+                    i = 1;
+                }
+                else
+                {
+                    i = 0;
+                }
+                for (i; i < n; i++)
+                {
+                    if (i == indexrows)
+                    {
+                        continue;
+                    }
+                    for (j = 0; j < n; j++)
+                    {
+                        if (j == indexcols)
+                        {
+                            continue;
+                        }
+                        Cofactors.values[minorrows][minorcols] = this->values[i][j];
+                        minorcols++;
+                        if (minorcols == n - 1)
+                        {
+                            minorrows++;
+                            minorcols = 0;
+                        }
+                    }
+                }
+                MatrixBInverse.values[z][y] = getDeterminant(Cofactors, n - 1) * pow(-1, powerindex1);
+                powerindex2++;
+                if (powerindex2 == n)
+                {
+                    powerindex2 = 0;
+                    powerindex1++;
+                }
+                powerindex1++;
+                y++;
+                if (y == n)
+                {
+                    z++;
+                    if (z == n)
+                    {
+                        z = n - 1;
+                    }
+                    y = 0;
+                }
+    
+                if (indexcols == n - 1)
+                {
+                    indexcols = -1;
+                    indexrows++;
+                }
+            }
+    
+        }
+        MatrixBInverse = ~MatrixBInverse;
+        for (int x = 0; x < MatrixBInverse.rows; x++)
 		{
-
-			MatrixBInverse = Matrix(this);
-
-			float temp = this->values[0][0];
-			MatrixBInverse.values[0][0] = MatrixBInverse.values[1][1];
-			MatrixBInverse.values[1][1] = temp;
-
-			MatrixBInverse.values[1][0] = -MatrixBInverse.values[1][0];
-			MatrixBInverse.values[0][1] = -MatrixBInverse.values[0][1];
-
-			for (i = 0; i < rows; i++)
+			for (int y = 0; y < MatrixBInverse.cols; y++)
 			{
-				for (j = 0; j < cols; j++)
-				{
-					MatrixBInverse.values[i][j] = Reciprocal * MatrixBInverse.values[i][j];
-				}
+				MatrixBInverse.values[x][y] = Reciprocal * MatrixBInverse.values[x][y];
 			}
-
-		}
-		else
-		{
-			for (indexcols = 0, indexrows = 0; indexrows < n; indexcols++)
-			{
-				minorrows = 0;
-				minorcols = 0;
-				if (indexrows == 0)
-				{
-					i = 1;
-				}
-				else
-				{
-					i = 0;
-				}
-				for (i; i < n; i++)
-				{
-					if (i == indexrows)
-					{
-						continue;
-					}
-					for (j = 0; j < n; j++)
-					{
-						if (j == indexcols)
-						{
-							continue;
-						}
-						Cofactors.values[minorrows][minorcols] = this->values[i][j];
-						minorcols++;
-						if (minorcols == n - 1)
-						{
-							minorrows++;
-							minorcols = 0;
-						}
-					}
-				}
-				MatrixBInverse.values[z][y] = getDeterminant(Cofactors, n - 1) * pow(-1, powerindex1);
-				powerindex2++;
-				if (powerindex2 == n)
-				{
-					powerindex2 = 0;
-					powerindex1++;
-				}
-				powerindex1++;
-				y++;
-				if (y == n)
-				{
-					z++;
-					if (z == n)
-					{
-						z = n - 1;
-					}
-					y = 0;
-				}
-
-				if (indexcols == n - 1)
-				{
-					indexcols = -1;
-					indexrows++;
-				}
-			}
-
-		}
-		// 
-		return MatrixBInverse~;
-  }
+        }
+        
+        // 
+        return MatrixBInverse;
+    }
 
 	//Used for testing
 	/*Matrix Multiplication(Matrix& MatrixA, Matrix& MatrixB)
@@ -415,24 +424,19 @@ public:
 		// If the matrix is not a square (rows = columns) , you can't get a inverse, so you can't divide.
 		if (rows != matrix.cols)
 		{
-			std::cout << "There is no unique solution\n";
+			throw "There is no unique solution\n";
 			return Matrix();
 		}
 
         Matrix MatrixBInverse = matrix.inverse();
     
-		for (int x = 0; x < MatrixBInverse.rows; x++)
-		{
-			for (int y = 0; y < MatrixBInverse.cols; y++)
-			{
-				MatrixBInverse.values[x][y] = Reciprocal * MatrixBInverse.values[x][y];
-			}
-		}
-		Matrix Result = this * MatrixBInverse;
+        Matrix matA(values);
+		
+		Matrix Result = matA * MatrixBInverse;
 		return Result;
 
     }
-    
+    /*
     void display() {
 
         for (int i = 0; i < rows; i++){
@@ -443,7 +447,6 @@ public:
             std::cout << std::endl;
         }
     }
-
+    */
 };
-
 #endif MATH_LIBRARY_MATRIX_H
