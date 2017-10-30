@@ -77,7 +77,7 @@ public:
     // Matrix Destructor
     ~Matrix() {
         //vector<vector<float> >().swap(values);
-        values.shrink_to_fit();
+        //values.shrink_to_fit();
     }
 
     // get matrix values
@@ -229,13 +229,13 @@ public:
   
     Matrix inverse() {
     
-        float Determinant = getDeterminant(this, rows);
+        Matrix MatrixBInverse(values);
+
+        float Determinant = getDeterminant(MatrixBInverse, rows);
         float Reciprocal = 1.0 / Determinant;
     
         // Used to get the n - 1 x n -1 matrices for to get inverse
         Matrix Cofactors(rows - 1, cols - 1);
-        
-        Matrix MatrixBInverse(rows, cols);
     
         int indexcols, indexrows, minorrows, minorcols, i, j, n = cols;
         // z is indexrows for inverse matrix , y for indexcols for inverse matrix , powerindexes to adjust signs
@@ -243,9 +243,6 @@ public:
     
         if (rows == 2)
         {
-    
-            MatrixBInverse = Matrix(this);
-    
             float temp = this->values[0][0];
             MatrixBInverse.values[0][0] = MatrixBInverse.values[1][1];
             MatrixBInverse.values[1][1] = temp;
