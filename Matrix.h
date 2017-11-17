@@ -4,14 +4,17 @@
 
 #include <vector>
 #include <math.h>
+#include <string>
+#include <algorithm>
 
 class Matrix {
 private:
 	// matrix with rows and columns
 	int rows, cols;
+    char name;
 	// values, organized as an outer vector of rows
 	// and an inner vector of columns
-	std::vector<std::vector<float> > values;
+	std::vector<std::vector<double> > values;
 
 public:
   // Empty Constructor
@@ -19,7 +22,8 @@ public:
     {
         rows = 0;
         cols = 0;
-        this->values.resize(0);
+        name = ' ';
+        this->values.resize(1);
         this->values[0].resize(0);
     }
 
@@ -37,7 +41,7 @@ public:
     }
 
     // initialize matrix by vector
-    Matrix(const std::vector<std::vector<float> > values) {
+    Matrix(const std::vector<std::vector<double> > values) {
 
         this->rows = int(values.size());
         this->cols = int(values[0].size());
@@ -60,18 +64,37 @@ public:
     Matrix(const Matrix& matrix) {
         rows = matrix.rows;
         cols = matrix.cols;
+        name = matrix.name;
         values.resize(matrix.values.size());
-        for (int i = 0; i < values.size(); ++i)
+        for (int i = 0; i < values.size(); i++)
         {
             values[i].resize(matrix.values[i].size());
         }
-        for (int i = 0; i < values.size(); ++i)
+        for (int i = 0; i < values.size(); i++)
         {
-            for (int j = 0; j < values[i].size(); ++j)
+            for (int j = 0; j < values[i].size(); j++)
             {
                 values[i][j] = matrix.values[i][j];
             }
         }
+    }
+
+
+    Matrix(std::string matStr){
+
+        setValues(matStr);
+
+    }
+
+    void setValues(std::string matStr);
+
+    void setName(char name)
+    {
+        this->name=name;
+    }
+
+    char getName(){
+        return name;
     }
 
     // Matrix Destructor
@@ -81,7 +104,7 @@ public:
     }
 
     // get matrix values
-    std::vector<std::vector<float> > getValues() {
+    std::vector<std::vector<double> > getValues() {
 
         return values;
     }
@@ -92,7 +115,7 @@ public:
     }
 
     // set matrix values
-    void setValues(std::vector<std::vector<float> > values){
+    void setValues(std::vector<std::vector<double> > values){
         this->values = values;
         this->rows = int(values.size());
         this->cols = int(values[0].size());
@@ -433,17 +456,18 @@ public:
 		return Result;
 
     }
-    /*
-    void display() {
 
-        for (int i = 0; i < rows; i++){
-            for (int j = 0; j < cols; j++) {
-                std::cout << values[i][j] << "  ";
+    void display(){
+        // printf("nR = %d\n",nR);
+        // printf("nC = %d\n",nC);
+        for (int iR=0; iR<this->rows; iR++){
+            for (int iC=0; iC<this->cols; iC++){
+
+                printf("%.1f \t",values[iR][iC]);
             }
-            
-            std::cout << std::endl;
+            printf("\n");
         }
+        printf("\n");
     }
-    */
 };
 #endif MATH_LIBRARY_MATRIX_H
