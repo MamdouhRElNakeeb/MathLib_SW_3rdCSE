@@ -42,12 +42,11 @@ int main(int argc, char *argv[]){
     int n = 0, matNo = 0;
     bool newMat = false;
     string matrixStr = "";
-    // A~Z a~z
-
-//    cout << "hgfdghkjr";
+    string constNo = "";
 
 
-//    ifstream fileData("/Users/mamdouhelnakeeb/Desktop/ASU/CSE/3rd/Software Engineering/Project/Repo/Math_Library/example.m");
+
+//    ifstream fileData("/Users/mamdouhelnakeeb/Desktop/ASU/CSE/3rd/Software Engineering/Project/Repo/Math_Library/bigexample.m");
     ifstream fileData(argv[1]);
 
     string fileLine;
@@ -109,17 +108,28 @@ int main(int argc, char *argv[]){
                 break;
 
             }
-            else if (fileLine[i] == '+' || fileLine[i] == '-' || fileLine[i] == '*' || fileLine[i] == '/' || fileLine[i] == '\'' || fileLine[i] == '.'){
+            else if (fileLine[i] == '+' || fileLine[i] == '-' || fileLine[i] == '*' || fileLine[i] == '/' || fileLine[i] == '\''){
 
                 operation = fileLine[i];
 
                 if (fileLine[i] == '/' && fileLine[i - 1] == '.'){
-                    operation = '.';
+                    operation = 'd';
+                }
+                else if (fileLine[i] == '*' && fileLine[i - 1] == '.'){
+                    operation = 'm';
                 }
             }
 
             else if (fileLine[i] == ' ' || fileLine[i] == '\r' || fileLine[i] == '\n' || fileLine[i] == '='){
                 continue;
+            }
+            else if ((int) fileLine[i] > 47 && (int) fileLine[i] < 58){
+
+                while (fileLine[i] != ' '){
+                    constNo += fileLine[i];
+                    i++;
+                }
+
             }
 //            else if (fileLine[i] == ']'){
 //
@@ -207,40 +217,54 @@ int main(int argc, char *argv[]){
 
                     break;
                 case '/':
-                    mat1 = temp_matrices[findMatrix(temp_matrices, matStr[1])];
+                    try {
+                        mat1 = temp_matrices[findMatrix(temp_matrices, matStr[1])];
 //                mat1.display();
-                    mat2 = temp_matrices[findMatrix(temp_matrices, matStr[2])];
+                        mat2 = temp_matrices[findMatrix(temp_matrices, matStr[2])];
 //                mat2.display();
-                    matIndex = findMatrix(temp_matrices, matStr[0]);
-                    mat3 = temp_matrices[matIndex];
+                        matIndex = findMatrix(temp_matrices, matStr[0]);
+                        mat3 = temp_matrices[matIndex];
 
-                    mat3 = mat1 / mat2;
+                        mat3 = mat1 / mat2;
 
-                    mat3.setName(temp_matrices[matIndex].getName());
+                        mat3.setName(temp_matrices[matIndex].getName());
 
-                    cout << mat3.getName() << " = " << endl;
-                    mat3.display();
-                    temp_matrices[matIndex] = mat3;
+                        cout << mat3.getName() << " = " << endl;
+                        mat3.display();
+                        temp_matrices[matIndex] = mat3;
+                    }
+                    catch (string e){
+                        cout << e << endl;
+                    }
+                    catch (char* e){
+                        cout << e << endl;
+                    }
 
                     break;
 
                 case '\'':
-                    mat1 = temp_matrices[findMatrix(temp_matrices, matStr[1])];
+                    try{
+                        mat1 = temp_matrices[findMatrix(temp_matrices, matStr[1])];
 //                mat1.display();
-                    matIndex = findMatrix(temp_matrices, matStr[0]);
-                    mat2 = temp_matrices[matIndex];
+                        matIndex = findMatrix(temp_matrices, matStr[0]);
+                        mat2 = temp_matrices[matIndex];
 //                mat2.display();
 
-                    mat2 = ~mat1;
+                        mat2 = ~mat1;
 
-                    mat2.setName(temp_matrices[matIndex].getName());
+                        mat2.setName(temp_matrices[matIndex].getName());
 
-                    cout << mat2.getName() << " = " << endl;
-                    mat2.display();
-                    temp_matrices[matIndex] = mat2;
+                        cout << mat2.getName() << " = " << endl;
+                        mat2.display();
+                        temp_matrices[matIndex] = mat2;
+                    }
+                    catch (string e){
+                        cout << e << endl;
+                    }
+
 
                     break;
-                case '.':
+                case 'd':
                     mat1 = temp_matrices[findMatrix(temp_matrices, matStr[1])];
 //                mat1.display();
                     matIndex = findMatrix(temp_matrices, matStr[0]);
@@ -250,13 +274,37 @@ int main(int argc, char *argv[]){
                     // implement here
 
                     //mat2 ./ mat1
-
+                    mat2 = mat1.divElement(atof(constNo.c_str()));
 
                     mat2.setName(temp_matrices[matIndex].getName());
 
-//                    cout << mat2.getName() << " = " << endl;
+                    cout << mat2.getName() << " = " << endl;
+                    mat2.display();
+
+                    temp_matrices[matIndex] = mat2;
+                    break;
+
+                case 'm':
+                    mat1 = temp_matrices[findMatrix(temp_matrices, matStr[1])];
+//                mat1.display();
+                    matIndex = findMatrix(temp_matrices, matStr[0]);
+                    mat2 = temp_matrices[matIndex];
+//                mat2.display();
+
+                    // implement here
+
+                    //mat2 .* mat1
+                    mat2 = mat1.multElement(atof(constNo.c_str()));
+
+                    mat2.setName(temp_matrices[matIndex].getName());
+
+                    cout << mat2.getName() << " = " << endl;
+                    mat2.display();
+
+                    temp_matrices[matIndex] = mat2;
                     break;
             }
+
 
 
         }

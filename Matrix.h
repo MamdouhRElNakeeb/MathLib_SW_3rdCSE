@@ -245,8 +245,9 @@ public:
 						}
 					}
 				}
-				Determinant += matrix.values[0][indexcols] * pow(-1, indexcols)*getDeterminant(minorMatrix, n - 1);
+				Determinant += matrix.values[0][indexcols] * pow(-1, indexcols) * getDeterminant(minorMatrix, n - 1);
 			}
+
 			return Determinant;
 		}
 	}
@@ -256,6 +257,10 @@ public:
         Matrix MatrixBInverse(values);
 
         double Determinant = getDeterminant(MatrixBInverse, rows);
+        if (Determinant == 0) {
+            throw ("Matrix Determinant equals ZERO");
+        }
+
         double Reciprocal = 1.0 / Determinant;
     
         // Used to get the n - 1 x n -1 matrices for to get inverse
@@ -445,8 +450,8 @@ public:
 		// If the matrix is not a square (rows = columns) , you can't get a inverse, so you can't divide.
 		if (rows != matrix.cols)
 		{
-			throw "There is no unique solution\n";
-			return Matrix();
+			throw ("There is no unique solution");
+
 		}
 
         Matrix MatrixBInverse = matrix.inverse();
@@ -457,6 +462,9 @@ public:
 		return Result;
 
     }
+
+    Matrix divElement(double x);
+    Matrix multElement(double x);
 
     void display(){
         // printf("nR = %d\n",nR);

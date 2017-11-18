@@ -63,3 +63,30 @@ void Matrix::setValues(std::string matStr) {
     cols = (int) values[0].size();
     rows = (int) values.size();
 }
+
+Matrix Matrix::divElement(double x){
+    Matrix temp(rows, cols);
+    for (int i = 0; i < values.size(); i++)
+    {
+        for (int t = 0; t < values[0].size(); t++)
+        {
+            temp.values[i][t] = x / values[i][t];
+        }
+    }
+    return temp;
+}
+
+Matrix Matrix::multElement(double x) {
+
+    Matrix temp(rows, cols);
+
+    for (int i = 0; i < values.size(); i++)
+    {
+        for (int t = 0; t < values[0].size(); t++)
+        {
+            temp.values[i][t] = x * values[i][t];
+        }
+    }
+
+    return temp;
+}
