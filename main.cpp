@@ -46,7 +46,7 @@ int main(int argc, char *argv[]){
 
 
 
-//    ifstream fileData("/Users/mamdouhelnakeeb/Desktop/ASU/CSE/3rd/Software Engineering/Project/Repo/Math_Library/bigexample.m");
+//    ifstream fileData("/Users/mamdouhelnakeeb/Desktop/ASU/CSE/3rd/Software Engineering/Project/Repo/Math_Library/example.m");
     ifstream fileData(argv[1]);
 
     string fileLine;
@@ -57,7 +57,8 @@ int main(int argc, char *argv[]){
 
         for (int i = 0; i < fileLine.length(); i++){
 
-//            cout << i << " -- " << n;
+            newMat = false;
+
             if (((int) fileLine[i] > 96 && (int) fileLine[i] < 123) || ((int) fileLine[i] > 64 && (int) fileLine[i] < 91)){
 
                 if (!isMatExist(temp_matrices, fileLine[i])){
@@ -65,7 +66,6 @@ int main(int argc, char *argv[]){
                     Matrix tempMat;
                     tempMat.setName(fileLine[i]);
                     temp_matrices[matNo] = tempMat;
-//                    temp_matrices[n].setName(matArr[n][i]);
 
                     operation = 'a';
 
@@ -79,9 +79,7 @@ int main(int argc, char *argv[]){
             else if (fileLine[i] == '['){
 
                 newMat = true;
-//                temp_matrices[matNo - 1].setValues(fileLine.substr(i + 1, fileLine.find(']') - i - 1));
 
-                //temp_matrices[n].display();
                 operation = 'a';
 
                 i++;
@@ -153,6 +151,10 @@ int main(int argc, char *argv[]){
 ////                temp_matrices[matNo - 1].setValues(fileLine.substr(i, fileLine.find(']') - i));
 //            }
 
+        }
+
+        if (matStr.length() == 1 && !newMat){
+            operation = 'p';
         }
 
         if (operation != 'a'){
@@ -300,6 +302,14 @@ int main(int argc, char *argv[]){
                     mat2.display();
 
                     temp_matrices[matIndex] = mat2;
+                    break;
+
+                case 'p':
+                    mat1 = temp_matrices[findMatrix(temp_matrices, matStr[0])];
+//
+                    cout << mat1.getName() << " = " << endl;
+                    mat1.display();
+
                     break;
             }
 
