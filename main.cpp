@@ -29,7 +29,7 @@ bool isMatExist (vector<Matrix> &temp_matrices, char name){
 }
 
 
-int main(){
+int main(int argc, char *argv[]){
 
     string matArr[] = {"A = [1 2 3;4 5 6;7 8 9]",
                        "B = [3 4 9;4 8 6;8 5 3]",
@@ -40,13 +40,15 @@ int main(){
     string matStr = "";
     char operation = 'a';
     int n = 0, matNo = 0;
+    bool newMat = false;
+    string matrixStr = "";
     // A~Z a~z
 
 //    cout << "hgfdghkjr";
 
 
-    ifstream fileData("/Users/mamdouhelnakeeb/Desktop/ASU/CSE/3rd/Software Engineering/Project/Repo/Math_Library/example.m");
-
+//    ifstream fileData("/Users/mamdouhelnakeeb/Desktop/ASU/CSE/3rd/Software Engineering/Project/Repo/Math_Library/example.m");
+    ifstream fileData(argv[1]);
 
     string fileLine;
 
@@ -77,12 +79,33 @@ int main(){
             }
             else if (fileLine[i] == '['){
 
-                temp_matrices[matNo - 1].setValues(fileLine.substr(i + 1, fileLine.find(']') - i - 1));
-//                temp_matrices[matNo - 1].setName(matStr[0]);
+                newMat = true;
+//                temp_matrices[matNo - 1].setValues(fileLine.substr(i + 1, fileLine.find(']') - i - 1));
+
                 //temp_matrices[n].display();
                 operation = 'a';
 
+                i++;
 
+                while (fileLine[i] != ']'){
+                    matrixStr += fileLine[i];
+                    i++;
+
+                    if(i >= fileLine.length()){
+                        getline(fileData, fileLine);
+                        i = 0;
+                    }
+                }
+
+                if (matrixStr[matrixStr.length() - 1] == ';'){
+                    matrixStr = matrixStr.substr(0, matrixStr.length() - 1);
+                }
+                else if (matrixStr[matrixStr.length() - 2] == ';'){
+                    matrixStr = matrixStr.substr(0, matrixStr.length() - 2);
+                }
+
+                temp_matrices[matNo - 1].setValues(matrixStr);
+                matrixStr = "";
                 break;
 
             }
@@ -95,9 +118,30 @@ int main(){
                 }
             }
 
-            else if (fileLine[i] == ' '){
+            else if (fileLine[i] == ' ' || fileLine[i] == '\r' || fileLine[i] == '\n' || fileLine[i] == '='){
                 continue;
             }
+//            else if (fileLine[i] == ']'){
+//
+//                if (matrixStr[matrixStr.length() - 1] == ';' || matrixStr[matrixStr.length() - 1] == ']'){
+//                    matrixStr = matrixStr.substr(0, matrixStr.length() - 1);
+//                }
+//
+//                temp_matrices[matNo - 1].setValues(matrixStr);
+//                matrixStr = "";
+//                newMat = false;
+//            }
+//            else {
+//                if (newMat){
+//
+//                    matrixStr += fileLine[i];
+////                    cout << fileLine.substr(i, fileLine.length() - i - 1) << endl;
+//
+////                    break;
+//
+//                }
+////                temp_matrices[matNo - 1].setValues(fileLine.substr(i, fileLine.find(']') - i));
+//            }
 
         }
 
@@ -120,6 +164,9 @@ int main(){
 
 
                     mat3.setName(temp_matrices[matIndex].getName());
+
+
+                    cout << mat3.getName() << " = " << endl;
                     mat3.display();
 
                     temp_matrices[matIndex] = mat3;
@@ -137,6 +184,7 @@ int main(){
 
                     mat3.setName(temp_matrices[matIndex].getName());
 
+                    cout << mat3.getName() << " = " << endl;
                     mat3.display();
                     temp_matrices[matIndex] = mat3;
 
@@ -153,6 +201,7 @@ int main(){
 
                     mat3.setName(temp_matrices[matIndex].getName());
 
+                    cout << mat3.getName() << " = " << endl;
                     mat3.display();
                     temp_matrices[matIndex] = mat3;
 
@@ -169,6 +218,7 @@ int main(){
 
                     mat3.setName(temp_matrices[matIndex].getName());
 
+                    cout << mat3.getName() << " = " << endl;
                     mat3.display();
                     temp_matrices[matIndex] = mat3;
 
@@ -185,6 +235,7 @@ int main(){
 
                     mat2.setName(temp_matrices[matIndex].getName());
 
+                    cout << mat2.getName() << " = " << endl;
                     mat2.display();
                     temp_matrices[matIndex] = mat2;
 
@@ -203,6 +254,7 @@ int main(){
 
                     mat2.setName(temp_matrices[matIndex].getName());
 
+//                    cout << mat2.getName() << " = " << endl;
                     break;
             }
 

@@ -40,6 +40,15 @@ void Matrix::setValues(std::string matStr) {
                 cols = 0;
                 break;
 
+            case '\r':
+                break;
+
+            case '\n':
+                break;
+
+            case ']':
+                break;
+
             default:
                 tempNo += matStr[i];
                 newNo = true;
@@ -51,6 +60,6 @@ void Matrix::setValues(std::string matStr) {
     values[rows][cols] = atof(tempNo.c_str());
     tempNo = "";
 
-    cols++;
-    rows++;
+    cols = (int) values[0].size();
+    rows = (int) values.size();
 }
