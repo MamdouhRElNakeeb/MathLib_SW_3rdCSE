@@ -170,7 +170,7 @@ public:
 
 		else */
 
-		int sum =0  ;
+		double sum =0  ;
 		Matrix temp( rows ,matrix.cols);
 		for(int i=0 ; i<values.size() ; i++)
 		{
@@ -179,7 +179,7 @@ public:
 
 			for (int m=0 ; m<values[0].size() ; m++)
 			{
-				int  z;
+				double  z;
 				z= values[i][m]*matrix.values[m][j ];
 				sum= sum + z;
 				
@@ -201,15 +201,16 @@ public:
 			for (int j=0 ; j<values[0].size() ; j++)
 			{
 				temp.values[j][i]=values[i][j];
+				temp.values[i][j] = values[j][i];
 			}
 		}
 		return temp;
     }
 
 	// Used to get determinant
-	float getDeterminant(Matrix& matrix, int n)
+	double getDeterminant(Matrix& matrix, int n)
 	{
-		int Determinant = 0, indexcols, minorrows, minorcols, i, j;
+		double Determinant = 0, indexcols, minorrows, minorcols, i, j;
 		Matrix minorMatrix(n - 1, n - 1);
 
 		if (n == 2)
@@ -254,8 +255,8 @@ public:
     
         Matrix MatrixBInverse(values);
 
-        float Determinant = getDeterminant(MatrixBInverse, rows);
-        float Reciprocal = 1.0 / Determinant;
+        double Determinant = getDeterminant(MatrixBInverse, rows);
+        double Reciprocal = 1.0 / Determinant;
     
         // Used to get the n - 1 x n -1 matrices for to get inverse
         Matrix Cofactors(rows - 1, cols - 1);
@@ -266,7 +267,7 @@ public:
     
         if (rows == 2)
         {
-            float temp = this->values[0][0];
+            double temp = this->values[0][0];
             MatrixBInverse.values[0][0] = MatrixBInverse.values[1][1];
             MatrixBInverse.values[1][1] = temp;
     
@@ -463,7 +464,7 @@ public:
         for (int iR=0; iR<this->rows; iR++){
             for (int iC=0; iC<this->cols; iC++){
 
-                printf("%.1f \t",values[iR][iC]);
+                printf("%.4f  \t",values[iR][iC]);
             }
             printf("\n");
         }
