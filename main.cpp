@@ -217,13 +217,14 @@ int main(int argc, char *argv[]){
 
                     break;
                 case '/':
-                    try {
-                        mat1 = temp_matrices[findMatrix(temp_matrices, matStr[1])];
+                    mat1 = temp_matrices[findMatrix(temp_matrices, matStr[1])];
 //                mat1.display();
-                        mat2 = temp_matrices[findMatrix(temp_matrices, matStr[2])];
+                    mat2 = temp_matrices[findMatrix(temp_matrices, matStr[2])];
 //                mat2.display();
-                        matIndex = findMatrix(temp_matrices, matStr[0]);
-                        mat3 = temp_matrices[matIndex];
+                    matIndex = findMatrix(temp_matrices, matStr[0]);
+                    mat3 = temp_matrices[matIndex];
+
+                    try {
 
                         mat3 = mat1 / mat2;
 
@@ -233,11 +234,8 @@ int main(int argc, char *argv[]){
                         mat3.display();
                         temp_matrices[matIndex] = mat3;
                     }
-                    catch (string e){
-                        cout << e << endl;
-                    }
-                    catch (char* e){
-                        cout << e << endl;
+                    catch (const char* msg){
+                        cout << msg << endl;
                     }
 
                     break;

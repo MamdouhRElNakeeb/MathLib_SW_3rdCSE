@@ -6,6 +6,7 @@
 #include <math.h>
 #include <string>
 #include <algorithm>
+#include <stdio.h>
 
 class Matrix {
 private:
@@ -18,73 +19,20 @@ private:
 
 public:
   // Empty Constructor
-    Matrix()
-    {
-        rows = 0;
-        cols = 0;
-        name = ' ';
-        this->values.resize(1);
-        this->values[0].resize(0);
-    }
+    Matrix();
 
     // initialize matrix by its size
-    Matrix(const unsigned int rows, const unsigned int cols) {
-
-        // initialize the matrix size
-        this->values.resize(rows);
-        for (int i = 0; i < rows; ++i) {
-            this->values[i].resize(cols);
-        }
-
-        this->rows = rows;
-        this->cols = cols;
-    }
+    Matrix(const unsigned int rows, const unsigned int cols);
 
     // initialize matrix by vector
-    Matrix(const std::vector<std::vector<double> > values) {
-
-        this->rows = int(values.size());
-        this->cols = int(values[0].size());
-        this->values.resize(values.size());
-        for (int i = 0; i < values.size(); ++i)
-        {
-            this->values[i].resize(values[i].size());
-        }
-        for (int i = 0; i < values.size(); ++i)
-        {
-            for (int j = 0; j < values[i].size(); ++j)
-            {
-                this->values[i][j] = values[i][j];
-            }
-        }
-    }
+    Matrix(const std::vector<std::vector<double> > values);
 
 
     // Copy a matrix
-    Matrix(const Matrix& matrix) {
-        rows = matrix.rows;
-        cols = matrix.cols;
-        name = matrix.name;
-        values.resize(matrix.values.size());
-        for (int i = 0; i < values.size(); i++)
-        {
-            values[i].resize(matrix.values[i].size());
-        }
-        for (int i = 0; i < values.size(); i++)
-        {
-            for (int j = 0; j < values[i].size(); j++)
-            {
-                values[i][j] = matrix.values[i][j];
-            }
-        }
-    }
+    Matrix(const Matrix& matrix);
 
 
-    Matrix(std::string matStr){
-
-        setValues(matStr);
-
-    }
+    Matrix(std::string matStr);
 
     void setValues(std::string matStr);
 
@@ -133,28 +81,38 @@ public:
 
     // Matrix Operations
     Matrix operator+(Matrix& matrix){
-		  Matrix temp(matrix.rows,matrix.cols);
-		  for(int i=0 ; i<matrix.values.size() ; i++)
-		  {
-			  for (int t=0 ; t<matrix.values[0].size() ; t++)
-			  {
-				  temp.values[i][t]=values[i][t]+matrix.values[i][t];
-			  }
-		  }
-		  return temp;
+
+        if (rows != matrix.rows && cols != matrix.cols){
+            throw "Invalid Matrices Dimensions. \n";
+        }
+
+        Matrix temp(matrix.rows,matrix.cols);
+        for(int i=0 ; i<matrix.values.size() ; i++)
+        {
+            for (int t=0 ; t<matrix.values[0].size() ; t++)
+            {
+                temp.values[i][t]=values[i][t]+matrix.values[i][t];
+            }
+        }
+        return temp;
 
     }
 
     Matrix operator-(Matrix& matrix){
-		  Matrix temp(matrix.rows,matrix.cols);
-		  for(int i=0 ; i<matrix.values.size() ; i++)
-		  {
-			  for (int t=0 ; t<matrix.values[0].size() ; t++)
-			  {
-				  temp.values[i][t]=values[i][t]-matrix.values[i][t];
-			  }
-		  }
-		  return temp;
+
+        if (rows != matrix.rows && cols != matrix.cols){
+            throw "Invalid Matrices Dimensions \n";
+        }
+
+        Matrix temp(matrix.rows,matrix.cols);
+        for(int i=0 ; i<matrix.values.size() ; i++)
+        {
+            for (int t=0 ; t<matrix.values[0].size() ; t++)
+            {
+                temp.values[i][t]=values[i][t]-matrix.values[i][t];
+            }
+        }
+        return temp;
 
     }
 
@@ -210,75 +168,78 @@ public:
 	// Used to get determinant
 	double getDeterminant(Matrix& matrix, int n)
 	{
-		double Determinant = 0, indexcols, minorrows, minorcols, i, j;
-		Matrix minorMatrix(n - 1, n - 1);
+        double Determinant = 0, indexcols, minorrows, minorcols, i, j;
+        Matrix minorMatrix(n - 1, n - 1);
 
-		if (n == 2)
-		{
-			Determinant = ((matrix.values[0][0] * matrix.values[1][1]) - (matrix.values[1][0] * matrix.values[0][1]));
-			return Determinant;
-		}
+        if (n == 2)
+        {
+            Determinant = ((matrix.values[0][0] * matrix.values[1][1]) - (matrix.values[1][0] * matrix.values[0][1]));
+            return Determinant;
+        }
 
-		else
-		{
-			// index for the larger matrix
-			for (indexcols = 0; indexcols < n; indexcols++)
-			{
-				// indexs for the minor matrix
-				minorrows = 0;
-				minorcols = 0;
+        else
+        {
+            // index for the larger matrix
+            for (indexcols = 0; indexcols < n; indexcols++)
+            {
+                // indexs for the minor matrix
+                minorrows = 0;
+                minorcols = 0;
 
-				for (i = 1; i < n; i++)
-				{
-					for (j = 0; j < n; j++)
-					{
-						if (j == indexcols)
-						{
-							continue;
-						}
-						minorMatrix.values[minorrows][minorcols] = matrix.values[i][j];
-						minorcols++;
-						if (minorcols == n - 1)
-						{
-							minorrows++;
-							minorcols = 0;
-						}
-					}
-				}
-				Determinant += matrix.values[0][indexcols] * pow(-1, indexcols) * getDeterminant(minorMatrix, n - 1);
-			}
-
-			return Determinant;
-		}
+                for (i = 1; i < n; i++)
+                {
+                    for (j = 0; j < n; j++)
+                    {
+                        if (j == indexcols)
+                        {
+                            continue;
+                        }
+                        minorMatrix.values[minorrows][minorcols] = matrix.values[i][j];
+                        minorcols++;
+                        if (minorcols == n - 1)
+                        {
+                            minorrows++;
+                            minorcols = 0;
+                        }
+                    }
+                }
+                Determinant += matrix.values[0][indexcols] * pow(-1, indexcols)*getDeterminant(minorMatrix, n - 1);
+                if (Determinant == 0)
+                {
+                    return 0;
+                }
+            }
+            return Determinant;
+        }
 	}
   
     Matrix inverse() {
-    
+
         Matrix MatrixBInverse(values);
 
         double Determinant = getDeterminant(MatrixBInverse, rows);
-        if (Determinant == 0) {
-            throw ("Matrix Determinant equals ZERO");
+        if (Determinant == 0.0)
+        {
+            throw "Invalid Matrices Division. \n";
         }
-
         double Reciprocal = 1.0 / Determinant;
-    
+
         // Used to get the n - 1 x n -1 matrices for to get inverse
         Matrix Cofactors(rows - 1, cols - 1);
-    
+
         int indexcols, indexrows, minorrows, minorcols, i, j, n = cols;
         // z is indexrows for inverse matrix , y for indexcols for inverse matrix , powerindexes to adjust signs
         int z = 0, y = 0, powerindex1 = 0, powerindex2 = 0;
-    
+
         if (rows == 2)
         {
             double temp = this->values[0][0];
             MatrixBInverse.values[0][0] = MatrixBInverse.values[1][1];
             MatrixBInverse.values[1][1] = temp;
-    
+
             MatrixBInverse.values[1][0] = -MatrixBInverse.values[1][0];
             MatrixBInverse.values[0][1] = -MatrixBInverse.values[0][1];
-    
+
             for (i = 0; i < rows; i++)
             {
                 for (j = 0; j < cols; j++)
@@ -286,7 +247,7 @@ public:
                     MatrixBInverse.values[i][j] = Reciprocal * MatrixBInverse.values[i][j];
                 }
             }
-    
+
         }
         else
         {
@@ -341,24 +302,24 @@ public:
                     }
                     y = 0;
                 }
-    
+
                 if (indexcols == n - 1)
                 {
                     indexcols = -1;
                     indexrows++;
                 }
             }
-    
+
         }
         MatrixBInverse = ~MatrixBInverse;
         for (int x = 0; x < MatrixBInverse.rows; x++)
-		{
-			for (int y = 0; y < MatrixBInverse.cols; y++)
-			{
-				MatrixBInverse.values[x][y] = Reciprocal * MatrixBInverse.values[x][y];
-			}
+        {
+            for (int y = 0; y < MatrixBInverse.cols; y++)
+            {
+                MatrixBInverse.values[x][y] = Reciprocal * MatrixBInverse.values[x][y];
+            }
         }
-        
+
         // 
         return MatrixBInverse;
     }
@@ -450,8 +411,7 @@ public:
 		// If the matrix is not a square (rows = columns) , you can't get a inverse, so you can't divide.
 		if (rows != matrix.cols)
 		{
-			throw ("There is no unique solution");
-
+			throw "Invalid Matrices Division. \n";
 		}
 
         Matrix MatrixBInverse = matrix.inverse();
@@ -466,17 +426,6 @@ public:
     Matrix divElement(double x);
     Matrix multElement(double x);
 
-    void display(){
-        // printf("nR = %d\n",nR);
-        // printf("nC = %d\n",nC);
-        for (int iR=0; iR<this->rows; iR++){
-            for (int iC=0; iC<this->cols; iC++){
-
-                printf("%.4f  \t",values[iR][iC]);
-            }
-            printf("\n");
-        }
-        printf("\n");
-    }
+    void display();
 };
-#endif MATH_LIBRARY_MATRIX_H
+#endif

@@ -4,6 +4,67 @@
 
 #include "Matrix.h"
 
+Matrix::Matrix() {
+    rows = 0;
+    cols = 0;
+    name = ' ';
+    this->values.resize(1);
+    this->values[0].resize(0);
+}
+
+Matrix::Matrix(const unsigned int rows, const unsigned int cols) {
+
+    // initialize the matrix size
+    this->values.resize(rows);
+    for (int i = 0; i < rows; ++i) {
+        this->values[i].resize(cols);
+    }
+
+    this->rows = rows;
+    this->cols = cols;
+}
+
+Matrix::Matrix(const std::vector<std::vector<double> > values) {
+
+    this->rows = int(values.size());
+    this->cols = int(values[0].size());
+    this->values.resize(values.size());
+    for (int i = 0; i < values.size(); ++i)
+    {
+        this->values[i].resize(values[i].size());
+    }
+    for (int i = 0; i < values.size(); ++i)
+    {
+        for (int j = 0; j < values[i].size(); ++j)
+        {
+            this->values[i][j] = values[i][j];
+        }
+    }
+}
+
+Matrix::Matrix(const Matrix& matrix) {
+    rows = matrix.rows;
+    cols = matrix.cols;
+    name = matrix.name;
+    values.resize(matrix.values.size());
+    for (int i = 0; i < values.size(); i++)
+    {
+        values[i].resize(matrix.values[i].size());
+    }
+    for (int i = 0; i < values.size(); i++)
+    {
+        for (int j = 0; j < values[i].size(); j++)
+        {
+            values[i][j] = matrix.values[i][j];
+        }
+    }
+}
+
+Matrix::Matrix(std::string matStr){
+
+    setValues(matStr);
+
+}
 
 void Matrix::setValues(std::string matStr) {
 
@@ -89,4 +150,16 @@ Matrix Matrix::multElement(double x) {
     }
 
     return temp;
+}
+
+void Matrix::display(){
+
+    for (int iR=0; iR<this->rows; iR++){
+        for (int iC=0; iC<this->cols; iC++){
+
+            printf("%.4f  \t",values[iR][iC]);
+        }
+        printf("\n");
+    }
+    printf("\n");
 }
